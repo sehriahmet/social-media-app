@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Social Media App
 
-## Getting Started
+A fully responsive social media application built with Next.js, Redux, and TypeScript. This app allows users to view a post feed, search for posts, bookmark favorite posts, and view user profiles. It features a fake backend using JSON Server and is deployed on Vercel.
 
-First, run the development server:
+**You can access the app here: [Social Media App](https://a-sehriyaroglu-social-media-app.vercel.app/)**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Responsive Design**: Optimized for large, medium, and small devices.
+- **Infinite Scrolling**: Load more posts as the user scrolls, improving performance and user experience.
+- **Post Feed**: Displays posts in reverse chronological order, allowing users to view comments on each post.
+- **Search Functionality**: Enables searching for posts within the feed, updating the displayed posts based on the search input.
+- **Bookmarks**: Allows users to bookmark posts, with the data managed using Redux for persistent state management.
+- **Profile Pages**: Displays the posts shared by individual users.
+- **Explore Page**: (To be implemented) A section where users can search for posts by tags.
+- **Post Management**: Users can like posts and add new posts, which are stored in the Redux state.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Technologies Used
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js**: A React framework for server-side rendering and static site generation.
+- **Redux Toolkit**: Manages global state for posts, bookmarks, and user profiles.
+- **TypeScript**: Adds type safety to the codebase.
+- **JSON Server**: Provides a mock backend API to simulate data interactions.
+- **Vercel**: Deployment platform used to host the application.
 
-## Learn More
+## Future Enhancements
 
-To learn more about Next.js, take a look at the following resources:
+- **Explore Page**: Implement tag-based post searching.
+- **Bookmarks Improvement**: Accurately track bookmarked posts in the dataset.
+- **Post Creation**: Enable users to create new posts, which will be saved in Redux and reflected across the app.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
