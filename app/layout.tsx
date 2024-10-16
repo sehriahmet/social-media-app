@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+import { Providers } from './provider';
 import LeftSideBar from "@/components/shared/LeftSidebar";
 
 const geistSans = localFont({
@@ -28,10 +29,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
+        <Providers>
           <LeftSideBar />
           <main className="lg:ml-[340px] flex lg:w-full lg:max-w-3xl h-auto flex-col">
             {children}
           </main>
+        </Providers>
       </body>
     </html>
   );
