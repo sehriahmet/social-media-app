@@ -1,12 +1,17 @@
 "use client";
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPosts } from '../store/slices/postsSlice';
+import { resetPosts } from '../store/slices/postsSlice';
 import { RootState, AppDispatch } from '../store';
+import Image from 'next/image';
 
 import PostCard from "@/components/shared/PostCard"
 import SearchBar from "@/components/shared/SearchBar"
+import { Post } from '@/types';
+import Loader from '@/components/shared/Loader';
+
 
 const Home = () => {
   
@@ -14,35 +19,20 @@ const Home = () => {
   const { posts, page, isLoading, hasNextPage } = useSelector((state: RootState) => state.posts);
   const [searchInput, setSearchInput] = useState<string>('');
   const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts);
-  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   useEffect(() => {
-    setIsSearching(true);
-    const handler = setTimeout(() => {
-      if (searchInput) {
-        const results = posts.filter(post => 
-          post.content?.toLowerCase().includes(searchInput.toLowerCase())
-        );
-        setFilteredPosts(results);
-      } else {
-        setFilteredPosts([]);
-      }
-      setIsSearching(false);
-    }, 1500);
-
+    dispatch(resetPosts());
+    dispatch(fetchPosts({ page: 1 }));
+  
     return () => {
-      clearTimeout(handler);
+      dispatch(resetPosts());
     };
-  }, [searchInput, posts]);
-
-  useEffect(() => {
-    dispatch(fetchPosts(page));
   }, [dispatch]);
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading && hasNextPage) {
-        dispatch(fetchPosts(page));
+        dispatch(fetchPosts({page}));
       }
     };
 
@@ -50,20 +40,31 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [dispatch, page, isLoading, hasNextPage]);
 
+  useEffect(() => {
+    if (searchInput) {
+      const results = posts.filter(post =>
+        post.content?.toLowerCase().includes(searchInput.toLowerCase())
+      );
+      setFilteredPosts(results);
+    } else {
+      setFilteredPosts([]);
+    }
+  }, [searchInput, posts]);
+
   // useEffect(() => {
   //   console.log('Posts after search or fetch:',searchInput, posts, filteredPosts);
   // }, [posts]);
 
   // console.log(window.innerHeight + window.scrollY , document.body.offsetHeight);
 
-  // console.log(posts, page, searchInput);
+  console.log(posts, page, searchInput, filteredPosts);
   
   return (
     <div>
       {/* Header section */}
       <section className='flex flex-row items-center justify-between w-full h-12 backdrop-blur sticky top-0 z-20'>
-        <h1 className="font-bold text-xl ml-4 cursor-pointer"><a href="#">Home</a></h1>
-        <div className="mr-4 cursor-pointer">
+        <h1 className="hidden lg:flex font-bold text-xl ml-4 cursor-pointer"><a href="#">Home</a></h1>
+        <div className="flex flex-row justify-end w-full mr-4 cursor-pointer">
           <img src="/assets/cardTitleIcon/sparks.svg" alt="Sparks" />
         </div>
       </section>
@@ -75,7 +76,7 @@ const Home = () => {
 
       {/* New post section */}
       <section className="border-r-[0.5px] border-b-[0.5px] flex items-stretch py-4 space-x-2 h-32 relative">
-        <div className="ml-4 w-12 h-12 bg-slate-400 rounded-full flex-none mt-2"></div>
+        <div className="ml-4 w-12 h-12 bg-slate-400 rounded-full flex-none mt-2"><Image width={128} height={128} src="/assets/avatarImages/avatar-6.jpg" alt="More" className="h-full w-full object-cover rounded-full"/></div>
         <div className="flex flex-col w-full h-full">
           <input
             type="text"
@@ -102,8 +103,8 @@ const Home = () => {
       
       {/* All posts section */}
       <section className="flex flex-col w-full">
-        {searchInput && isSearching && filteredPosts.length < 1 ? (
-          <p>Searching...</p>
+        {searchInput && filteredPosts.length < 1 ? (
+          <div className='w-full h-full flex items-center justify-center p-10'><Loader /></div>
           ) : (
               filteredPosts.map((post) => (
                 <PostCard key={post.id} post={post} />
@@ -111,15 +112,15 @@ const Home = () => {
             )
         )}
 
-        {searchInput && !isSearching && filteredPosts.length < 1 && (
-          <p>Not found</p>
+        {searchInput && filteredPosts.length < 1 && (
+          <p className='w-full h-full flex items-center justify-center'>Not Found!</p>
         )}
 
         {!searchInput && posts.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
 
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <div className='w-full h-full flex items-center justify-center p-10'><Loader /></div>}
       </section>
 
     </div>
